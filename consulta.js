@@ -85,4 +85,8 @@ const prepararHATEOAS = (joyas) => {
   return HATEOAS;
 };
 
-module.exports = { obtenerJoyas, prepararHATEOAS, obtenerJoyasPorFiltros };
+module.exports = {
+  obtenerJoyas,
+  prepararHATEOAS,
+  obtenerJoyasPorFiltros,
+};

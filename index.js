@@ -16,6 +16,20 @@ app.listen(PORT, () => {
 app.use(express.json());
 app.use(cors());
 
+const reportarConsulta = async (req, res, next) => {
+  const url = req.url;
+  const { query } = req;
+  console.log(
+    `
+      Hoy ${new Date()}
+      Se ha recibido una consulta en la ruta ${url}
+      con la siguiente query:
+      `,
+    query
+  );
+  next();
+};
+
 app.get("/joyas", async (req, res) => {
   try {
     const queryStrings = req.query;
@@ -28,7 +42,7 @@ app.get("/joyas", async (req, res) => {
   }
 });
 
-app.get("/joyas/filtros", async (req, res) => {
+app.get("/joyas/filtros", reportarConsulta, async (req, res) => {
   try {
     const queryStrings = req.query;
     const joyas = await obtenerJoyasPorFiltros(queryStrings);
@@ -38,8 +52,6 @@ app.get("/joyas/filtros", async (req, res) => {
     res.status(500).json({ error: "Error al filtrar joyas" });
   }
 });
-
-
 
 app.get("*", (req, res) => {
   res.status(404).send("Esta ruta no existe");

@@ -3,7 +3,11 @@ const app = express();
 const cors = require("cors");
 const PORT = 3002;
 
-const { obtenerJoyas, prepararHATEOAS } = require("./consulta");
+const {
+  obtenerJoyas,
+  prepararHATEOAS,
+  obtenerJoyasPorFiltros,
+} = require("./consulta");
 
 app.listen(PORT, () => {
   console.log(`SERVIDOR ENCENDIDO ${PORT}`);
@@ -24,11 +28,18 @@ app.get("/joyas", async (req, res) => {
   }
 });
 
-app.get("/personal/filtros", async (req, res) => {
+app.get("/joyas/filtros", async (req, res) => {
+  try {
     const queryStrings = req.query;
-    const personal = await obtenerPersonalPorFiltros(queryStrings);
-    res.json(personal);
-  });
+    const joyas = await obtenerJoyasPorFiltros(queryStrings);
+    res.json(joyas);
+  } catch (error) {
+    console.error("Error al filtrar joyas:", error);
+    res.status(500).json({ error: "Error al filtrar joyas" });
+  }
+});
+
+
 
 app.get("*", (req, res) => {
   res.status(404).send("Esta ruta no existe");
